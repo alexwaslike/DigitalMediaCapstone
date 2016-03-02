@@ -8,20 +8,16 @@ public class Human : MonoBehaviour {
 	public GameController GameController;
 	public CharacterMovement CharacterMovement;
 
-	private List<Item> _journal;
-	public List<Item> Journal{
+	private List<Collectible> _journal;
+	public List<Collectible> Journal{
 		get { return _journal; }
 	}
 
 	void Start(){
-		_journal = new List<Item> ();
+		_journal = new List<Collectible> ();
 	}
 
-	void Update(){
-		GameController.SetSortingOrder (gameObject);
-	}
-
-	public void AddItemToJournal(Item item){
+	public void AddItemToJournal(Collectible item){
 		_journal.Add (item);
 	}
 

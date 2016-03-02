@@ -15,7 +15,7 @@ public class CharacterMovement : MonoBehaviour {
 		transform.Translate(new Vector3(horizontal, vertical, 0)* Speed);
 
 		if(horizontal != 0 || vertical != 0)
-			GameController.SetSortingOrder (gameObject);
+			GetComponent<SelfSort>().SetSortingOrder (gameObject);
 
 	}
 }

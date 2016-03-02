@@ -10,7 +10,8 @@ public class GameController : MonoBehaviour {
 	public GameObject HumanObj;
 	public Human Player;
 
-	public InventoryUI JournalUI;
+	public Inventory JournalUI;
+	public AddItemUI AddItemUI;
 
 	public TextDatabase TextDatabase;
 	public SpriteDatabase SpriteDatabase;
@@ -19,15 +20,6 @@ public class GameController : MonoBehaviour {
 
 	void Start(){
 		_timeScale = Time.timeScale;
-	}
-
-	public void SetSortingOrder(GameObject obj)
-    {
-		SpriteRenderer spriteRenderer = obj.GetComponent<SpriteRenderer> ();
-		if (spriteRenderer != null) {
-			spriteRenderer.sortingOrder = maxHeight - Mathf.FloorToInt(obj.transform.position.y*4);
-		} else
-			Debug.LogError ("Sprite Renderer null when attempting to sort object!");
 	}
 
 	public void PauseGame(bool paused)
@@ -48,6 +40,13 @@ public class GameController : MonoBehaviour {
 
 	public void OpenJournal(){
 		JournalUI.gameObject.SetActive (true);
+	}
+
+	public void AddItem(Collectible item){
+		Player.AddItemToJournal (item);
+		JournalUI.AddNewItem (item);
+		AddItemUI.gameObject.SetActive (false);
+		JournalUI.Exit ();
 	}
 
 }
