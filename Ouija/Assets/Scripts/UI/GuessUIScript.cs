@@ -110,5 +110,10 @@ public class GuessUIScript : MonoBehaviour
         }
 
     }
+
+    public void Exit()
+    {
+        gameObject.SetActive(false);
+    }
 	
 }
