@@ -13,6 +13,8 @@ public class GameController : MonoBehaviour {
 	public Inventory JournalUI;
 	public AddItemUI AddItemUI;
 
+    public GameObject GuessUI;
+
 	public TextDatabase TextDatabase;
 	public SpriteDatabase SpriteDatabase;
 
@@ -48,5 +50,10 @@ public class GameController : MonoBehaviour {
 		AddItemUI.gameObject.SetActive (false);
 		JournalUI.Exit ();
 	}
+
+    public void MakeAGuess()
+    {
+        GuessUI.SetActive(true);
+    }
 
 }
