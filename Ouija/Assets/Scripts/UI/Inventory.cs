@@ -32,13 +32,14 @@ public class Inventory : MonoBehaviour {
 		if (_collection == null)
 			_collection = new Dictionary<Collectible, Icon> ();
 
-		GameObject newObject = Instantiate(IconPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+		if (!_collection.ContainsKey(item)) {
+			GameObject newObject = Instantiate(IconPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
-		newObject.transform.SetParent(UIListContainer.transform, false);
-		newObject.GetComponent<Icon>().Inventory = this;
-		newObject.GetComponent<Icon>().Collectible = item;
-		_collection.Add (item.GetComponent<Collectible>(), newObject.GetComponent<Icon>());
-
+			newObject.transform.SetParent(UIListContainer.transform, false);
+			newObject.GetComponent<Icon>().Inventory = this;
+			newObject.GetComponent<Icon>().Collectible = item;
+			_collection.Add (item.GetComponent<Collectible>(), newObject.GetComponent<Icon>());
+		}
 	}
 
 	public void RemoveItem(Collectible itemToRemove){
