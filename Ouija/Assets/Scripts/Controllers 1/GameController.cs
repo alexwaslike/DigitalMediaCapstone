@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class GameController : MonoBehaviour {
 
@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
 
 	public GameObject HumanObj;
 	public Human Player;
+    public Ghost Ghost;
 
 	public Inventory JournalUI;
 	public AddItemUI AddItemUI;
@@ -17,6 +18,7 @@ public class GameController : MonoBehaviour {
 
 	public TextDatabase TextDatabase;
 	public SpriteDatabase SpriteDatabase;
+    public LevelItems LevelItems;
 
 	private string _culprit;
 	public string Culprit{
@@ -44,13 +46,16 @@ public class GameController : MonoBehaviour {
 
 	private void GenerateDeathScenario(){
 
-		int randomCulprit = (int)Random.Range (0, TextDatabase.CharacterDescriptions.Count-1);
-		int randomWeapon = (int)Random.Range (0, TextDatabase.WeaponDescriptions.Count-1);
-		int randomRoom = (int)Random.Range (0, TextDatabase.RoomDescriptions.Count - 1);
+		int randomCulprit = (int)Random.Range (0, TextDatabase.CharacterDescriptions.Count);
+		int randomWeapon = (int)Random.Range (0, TextDatabase.WeaponDescriptions.Count);
+		int randomRoom = (int)Random.Range (0, TextDatabase.RoomDescriptions.Count);
 
-		//_culprit = TextDatabase.CharacterDescriptions [randomCulprit];
-		//_weapon = TextDatabase.WeaponDescriptions [randomWeapon];
-		//_room = TextDatabase.RoomDescriptions [randomRoom];
+
+        _culprit = TextDatabase.GetCharacterList()[randomCulprit];
+        _weapon = TextDatabase.GetWeaponList()[randomWeapon];
+        _room = TextDatabase.GetRoomList()[randomRoom];
+
+        Debug.Log("name " + _culprit + " weapon " + _weapon + " room " + _room );
 
 	}
 
@@ -59,14 +64,19 @@ public class GameController : MonoBehaviour {
 		if (paused)
 		{
 			Time.timeScale = 0.0f;
-			HumanObj.GetComponent<CharacterMovement>().enabled = false;
+            if (HumanObj != null)
+                HumanObj.GetComponent<CharacterMovement>().enabled = false;
+            else
+                Ghost.GetComponent<CharacterMovement>().enabled = false;
 			AllowGameplay = false;
 		} else
 		{
 			Time.timeScale = _timeScale;
-			if(HumanObj != null)
-				HumanObj.GetComponent<CharacterMovement>().enabled = true;
-			AllowGameplay = true;
+            if (HumanObj != null)
+                HumanObj.GetComponent<CharacterMovement>().enabled = true;
+            else
+                Ghost.GetComponent<CharacterMovement>().enabled = true;
+            AllowGameplay = true;
 		}
 	}
 
@@ -81,9 +91,31 @@ public class GameController : MonoBehaviour {
 		JournalUI.Exit ();
 	}
 
+    public void AddItemGhost(Collectible item)
+    {
+        Ghost.AddItemToJournal(item);
+        JournalUI.AddNewItem(item);
+        AddItemUI.gameObject.SetActive(false);
+        JournalUI.Exit();
+    }
+
     public void MakeAGuess()
     {
         GuessUI.SetActive(true);
+    }
+
+    public void WinGame()
+    {
+        // TODO: once player and ghost interaction complete,
+        // and networking prototype made,
+        // need to have player tell ghost that game is done
+        // and display "win" screen on both
+    }
+
+    public void LoseGame()
+    {
+        // TODO: same from WinGame,
+        // but display "lose" screen on both
     }
 
 }

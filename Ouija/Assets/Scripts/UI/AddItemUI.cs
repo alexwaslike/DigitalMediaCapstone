@@ -20,6 +20,12 @@ public class AddItemUI : MonoBehaviour {
 		Exit ();
 	}
 
+    public void AddItemGhost()
+    {
+        GameController.AddItemGhost(SelectedCollectible.GetComponent<Collectible>());
+        Exit();
+    }
+
 	public void Exit(){
 		Inventory.gameObject.SetActive (false);
 		gameObject.SetActive(false);

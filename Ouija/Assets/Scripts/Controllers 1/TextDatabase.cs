@@ -33,5 +33,20 @@ public class TextDatabase : MonoBehaviour {
 
 	};
 
+    public List<string> GetWeaponList()
+    {
+        return new List<string>(WeaponDescriptions.Keys);
+    }
+
+    public List<string> GetCharacterList()
+    {
+        return new List<string>(CharacterDescriptions.Keys);
+    }
+
+    public List<string> GetRoomList()
+    {
+        return new List<string>(RoomDescriptions.Keys);
+    }
+
 
 }

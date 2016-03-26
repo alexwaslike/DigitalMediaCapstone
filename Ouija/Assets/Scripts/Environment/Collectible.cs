@@ -10,6 +10,8 @@ public class Collectible : MonoBehaviour {
 	public string Name;
 	public string Description;
 
+    public GameObject Highlight;
+
 	void Start(){
 		Sprite = GetComponent<SpriteRenderer> ().sprite;
 	}
