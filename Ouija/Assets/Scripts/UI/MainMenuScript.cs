@@ -6,12 +6,12 @@ public class MainMenuScript : MonoBehaviour
 {
     public void PlayHuman()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("PlayerView");
     }
 
     public void PlayGhost()
     {
-        SceneManager.LoadScene("GhostGame");
+        SceneManager.LoadScene("GhostView");
     }
 
     public void Credits()

@@ -36,7 +36,8 @@ public class Human : MonoBehaviour {
 	}
 
 	private void Death(){
-		// TODO: this.
+        // TODO: play some kind of simple death animation
+        GameController.LoseGame();
 	}
 
 
