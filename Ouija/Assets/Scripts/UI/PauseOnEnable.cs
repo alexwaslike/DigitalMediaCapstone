@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+ 
 public class PauseOnEnable : MonoBehaviour {
 
 	public GameController GameController;

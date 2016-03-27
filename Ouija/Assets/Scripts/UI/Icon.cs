@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
+ 
 public class Icon : MonoBehaviour {
 
 	public Inventory Inventory;
