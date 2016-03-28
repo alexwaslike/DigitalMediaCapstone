@@ -7,9 +7,13 @@ public class GameController : MonoBehaviour {
 	public int minHeight = 0;
 	public bool AllowGameplay;
 
-	public GameObject HumanObj;
-	public Human Player;
-    public Ghost Ghost;
+    public GameData GameData;
+
+	public GameObject PlayerObj;
+	public Player Player;
+
+    public GameObject HumanHUD;
+    public GameObject GhostHUD;
 
 	public Inventory JournalUI;
 	public AddItemUI AddItemUI;
@@ -17,7 +21,6 @@ public class GameController : MonoBehaviour {
     public GameObject GuessUI;
 
 	public TextDatabase TextDatabase;
-	public SpriteDatabase SpriteDatabase;
     public LevelItems LevelItems;
 
 	private string _culprit;
@@ -38,9 +41,17 @@ public class GameController : MonoBehaviour {
 	private float _timeScale;
 
 	void Start(){
+
+        GameData = FindObjectOfType<GameData>();
+
 		_timeScale = Time.timeScale;
 
 		GenerateDeathScenario ();
+
+        if (GameData.PlayerType == PlayerType.Human)
+            HumanHUD.SetActive(true);
+        else
+            GhostHUD.SetActive(true);
 
 	}
 
@@ -64,18 +75,14 @@ public class GameController : MonoBehaviour {
 		if (paused)
 		{
 			Time.timeScale = 0.0f;
-            if (HumanObj != null)
-                HumanObj.GetComponent<CharacterMovement>().enabled = false;
-            else
-                Ghost.GetComponent<CharacterMovement>().enabled = false;
+            if (PlayerObj != null)
+                PlayerObj.GetComponent<CharacterMovement>().enabled = false;
 			AllowGameplay = false;
 		} else
 		{
 			Time.timeScale = _timeScale;
-            if (HumanObj != null)
-                HumanObj.GetComponent<CharacterMovement>().enabled = true;
-            else
-                Ghost.GetComponent<CharacterMovement>().enabled = true;
+            if (PlayerObj != null)
+                PlayerObj.GetComponent<CharacterMovement>().enabled = true;
             AllowGameplay = true;
 		}
 	}
@@ -90,14 +97,6 @@ public class GameController : MonoBehaviour {
 		AddItemUI.gameObject.SetActive (false);
 		JournalUI.Exit ();
 	}
-
-    public void AddItemGhost(Collectible item)
-    {
-        Ghost.AddItemToJournal(item);
-        JournalUI.AddNewItem(item);
-        AddItemUI.gameObject.SetActive(false);
-        JournalUI.Exit();
-    }
 
     public void MakeAGuess()
     {

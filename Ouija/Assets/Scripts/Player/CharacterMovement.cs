@@ -3,7 +3,6 @@ using UnityEngine.Networking;
 
 public class CharacterMovement : NetworkBehaviour {
 
-	public GameController GameController;
 	public float Speed = 0.1f;
     
 	void Update()
@@ -18,7 +17,7 @@ public class CharacterMovement : NetworkBehaviour {
             transform.Translate(new Vector3(horizontal, vertical, 0) * Speed);
 
             if (horizontal != 0 || vertical != 0)
-                GetComponent<SelfSort>().SetSortingOrder(gameObject);
+                GetComponent<SelfSort>().SetSortingOrder();
         }
 
 	}

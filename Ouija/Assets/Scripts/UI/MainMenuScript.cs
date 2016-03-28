@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class MainMenuScript : MonoBehaviour
 {
+    public GameData GameData;
+
     public void PlayHuman()
     {
+        GameData.PlayerType = PlayerType.Human;
         SceneManager.LoadScene("PlayerView");
     }
 
     public void PlayGhost()
     {
-        SceneManager.LoadScene("GhostView");
+        GameData.PlayerType = PlayerType.Ghost;
+        SceneManager.LoadScene("PlayerView");
     }
 
     public void Credits()
