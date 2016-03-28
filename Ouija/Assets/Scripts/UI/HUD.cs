@@ -3,8 +3,6 @@ using System.Collections;
 
 public class HUD : MonoBehaviour {
 
-	public void InputFinished(){
-
-	}
+	
 
 }

@@ -1,20 +1,25 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
-public class CharacterMovement : MonoBehaviour {
+public class CharacterMovement : NetworkBehaviour {
 
 	public GameController GameController;
 	public float Speed = 0.1f;
     
 	void Update()
     {
+        if (!isLocalPlayer)
+            return;
+        else
+        {
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
 
-		float horizontal = Input.GetAxis("Horizontal");
-		float vertical = Input.GetAxis("Vertical");
+            transform.Translate(new Vector3(horizontal, vertical, 0) * Speed);
 
-		transform.Translate(new Vector3(horizontal, vertical, 0)* Speed);
-
-		if(horizontal != 0 || vertical != 0)
-			GetComponent<SelfSort>().SetSortingOrder (gameObject);
+            if (horizontal != 0 || vertical != 0)
+                GetComponent<SelfSort>().SetSortingOrder(gameObject);
+        }
 
 	}
 }

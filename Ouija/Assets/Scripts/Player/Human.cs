@@ -6,7 +6,6 @@ using System.Collections.Generic;
 public class Human : MonoBehaviour {
 
 	public GameController GameController;
-	public CharacterMovement CharacterMovement;
 
 	private float _health;
 	public float Health{
@@ -21,6 +20,11 @@ public class Human : MonoBehaviour {
 	void Start(){
 		_journal = new List<Collectible> ();
 		_health = 100;
+
+        GameController = FindObjectOfType<GameController>();
+        GameController.HumanObj = gameObject;
+        GameController.Player = this;
+
 	}
 
 	public void AddItemToJournal(Collectible item){
@@ -36,7 +40,6 @@ public class Human : MonoBehaviour {
 	}
 
 	private void Death(){
-        // TODO: play some kind of simple death animation
         GameController.LoseGame();
 	}
 

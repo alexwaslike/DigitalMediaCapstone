@@ -14,6 +14,8 @@ public class Ghost : MonoBehaviour {
     void Start()
     {
         _journal = new List<Collectible>();
+        GameController = FindObjectOfType<GameController>();
+        GameController.Ghost = this;
     }
 
     public void AddItemToJournal(Collectible item)

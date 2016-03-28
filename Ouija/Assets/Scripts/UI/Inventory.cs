@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
- 
-[RequireComponent(typeof(PauseOnEnable))]
+
 public class Inventory : MonoBehaviour {
 
 	// controllers needed

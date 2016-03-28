@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 public class LevelItems : MonoBehaviour {
 
-    public List<Collectible> LevelObjects;
+    public List<Collectible> CollectibleItems;
 
     public List<string> GetItemNamesList()
     {
         List<string> names = new List<string>();
 
-        if(LevelObjects != null)
+        if(CollectibleItems != null)
         {
-            foreach(Collectible item in LevelObjects)
+            foreach(Collectible item in CollectibleItems)
             {
                 names.Add(item.Name.ToLower());
             }
@@ -22,7 +22,7 @@ public class LevelItems : MonoBehaviour {
 
     public Collectible GetItemByName(string name)
     {
-        foreach(Collectible item in LevelObjects)
+        foreach(Collectible item in CollectibleItems)
         {
             if (item.Name.ToLower().Equals(name.ToLower()))
             {

@@ -11,12 +11,14 @@ public class Collectible : MonoBehaviour {
 
     public GameObject Highlight;
 
+    public Collectible ItemToCollect;
+
 	void Start(){
 		Sprite = GetComponent<SpriteRenderer> ().sprite;
 	}
 
 	void OnMouseUp(){
-		AddItemInventory.SelectedCollectible = this;
+        AddItemInventory.SelectedCollectible = ItemToCollect;
 		GameController.OpenJournal ();
 		AddItemInventory.gameObject.SetActive (true);
 	}

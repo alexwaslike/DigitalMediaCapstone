@@ -6,7 +6,6 @@ public class TextDatabase : MonoBehaviour
 
     public Dictionary<string, string> WeaponDescriptions = new Dictionary<string, string> {
 
-        { "Spoon", "An old-ass spoon." },
         { "Knife", "A tarnished silver kitchen knife with an ornate hilt." },
         { "Lorenz Rifle", "An old rifle of Austrian design. The barrel is rusted, but it might still fire." },
         { "Hydrochloric Acid", "A bottle containing a clear corrosive chemical." },
@@ -37,8 +36,7 @@ public class TextDatabase : MonoBehaviour
     public Dictionary<string, string> Clues = new Dictionary<string, string> {
 
 
-        {"Adam Clue 1"," Clue 1", "Evidence #1 \nCase: 342 \nEntrant: Adam Abrams\n" +
-            "Description: REDACTED.\n"},
+        {"Adam Clue 1", "Evidence #1 \nCase: 342 \nEntrant: Adam Abrams\nDescription: REDACTED.\n"},
 
         {"Adam Clue 2", "Evidence #2 \nCase: 342 \nEntrant: Adam Abrams\n" +
             "Description:  fingerprints found at the crime scene.\n" +

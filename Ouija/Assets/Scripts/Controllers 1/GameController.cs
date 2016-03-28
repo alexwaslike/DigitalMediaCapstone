@@ -13,9 +13,7 @@ public class GameController : MonoBehaviour {
 
 	public Inventory JournalUI;
 	public AddItemUI AddItemUI;
-
     public LoseUI LoseUI;
-
     public GameObject GuessUI;
 
 	public TextDatabase TextDatabase;
@@ -116,9 +114,7 @@ public class GameController : MonoBehaviour {
 
     public void LoseGame()
     {
-        
         LoseUI.gameObject.SetActive(true);
-
     }
 
 }

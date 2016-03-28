@@ -3,7 +3,7 @@ using UnityEngine.UI;
  
 public class HealthBar : MonoBehaviour {
 
-	public Human Human;
+    public GameController GameController;
 	public Image HealthBarImg;
 
 	private float _height;
@@ -21,7 +21,10 @@ public class HealthBar : MonoBehaviour {
 
 	void Update()
 	{
-		HealthBarImg.rectTransform.sizeDelta = new Vector2(_maxWidth * Human.Health / 100, _height);
-		HealthBarImg.rectTransform.anchoredPosition = new Vector2(_xLoc + HealthBarImg.rectTransform.sizeDelta.x / 2 - _maxWidth / 2, _yLoc);
+        if(GameController.Player != null)
+        {
+            HealthBarImg.rectTransform.sizeDelta = new Vector2(_maxWidth * GameController.Player.Health / 100, _height);
+            HealthBarImg.rectTransform.anchoredPosition = new Vector2(_xLoc + HealthBarImg.rectTransform.sizeDelta.x / 2 - _maxWidth / 2, _yLoc);
+        }
 	}
 }
