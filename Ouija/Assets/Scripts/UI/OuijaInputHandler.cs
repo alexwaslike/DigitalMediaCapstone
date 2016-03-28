@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class OuijaInputHandler : MonoBehaviour {
+public class OuijaInputHandler : NetworkBehaviour {
 
     public GameController GameController;
     public Text OutputText;
@@ -60,13 +61,11 @@ public class OuijaInputHandler : MonoBehaviour {
         
         if (_objectList.Contains(_input))
         {
-            // highlight in ghost world
-            Collectible item = GameController.LevelItems.GetItemByName(_input);
-            item.Highlight.gameObject.SetActive(true);
-            
+            GameController.Ghost.GetComponent<Player>().CmdHighlightItem(_input);
         }
 
     }
+    
 
 
 

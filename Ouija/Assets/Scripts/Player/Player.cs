@@ -8,7 +8,6 @@ using UnityEngine.Networking.NetworkSystem;
 
 public class Player : NetworkBehaviour
 {
-    private NetworkClient m_client;
     private const short _myMsg = 1002;
 
     public GameController GameController;
@@ -42,6 +41,8 @@ public class Player : NetworkBehaviour
             GameController.Ghost = gameObject;
         }
 
+        GameController.MainCamera.transform.parent = transform;
+
          _journal = new List<Collectible>();
         _health = 100;
 
@@ -53,6 +54,15 @@ public class Player : NetworkBehaviour
         message.PlayerType = GameController.GameData.PlayerType;
         connectionToServer.Send(_myMsg, message);
 
+    }
+
+    [Command]
+    public void CmdHighlightItem(string itemName)
+    {
+        Collectible item = GameController.LevelItems.GetItemByName(itemName);
+        var highlight = (GameObject)Instantiate(GameController.HighlightPrefab, Vector3.zero, Quaternion.identity);
+        highlight.transform.SetParent(item.transform, false);
+        NetworkServer.Spawn(highlight);
     }
 
     public void AddItemToJournal(Collectible item)

@@ -9,8 +9,6 @@ public class Collectible : MonoBehaviour {
 	public string Name;
 	public string Description;
 
-    public GameObject Highlight;
-
     public Collectible ItemToCollect;
 
 	void Start(){

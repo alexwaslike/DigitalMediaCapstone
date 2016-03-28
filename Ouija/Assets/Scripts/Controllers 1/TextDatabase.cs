@@ -21,22 +21,20 @@ public class TextDatabase : MonoBehaviour
 
     public Dictionary<string, string> CharacterDescriptions = new Dictionary<string, string> {
 
-        { "Your Mom", "Yo mamma so fat, she has her own zip code." },
-        { "Donald Drumpf", "#idkbutnottrump" }
+        { "Adam Abrams", "A burly man with short dark hair and a mustache, but no beard. He has a bald spot." }
 
     };
 
     public Dictionary<string, string> RoomDescriptions = new Dictionary<string, string> {
 
-        { "Sex Dungeon", "The walls are lined with chains, leather suits, and... furry handcuffs?" },
-        { "Fancy Bathroom", "The fancy French toilet cleans your butt for you." }
+        { "Foye", "A beautiful entrance hall." }
 
     };
 
     public Dictionary<string, string> Clues = new Dictionary<string, string> {
 
 
-        {"Adam Clue 1", "Evidence #1 \nCase: 342 \nEntrant: Adam Abrams\nDescription: REDACTED.\n"},
+        {"Adam Clue 1", "Evidence #1 Case: 342 Entrant: Adam Abrams Description: REDACTED."},
 
         {"Adam Clue 2", "Evidence #2 \nCase: 342 \nEntrant: Adam Abrams\n" +
             "Description:  fingerprints found at the crime scene.\n" +

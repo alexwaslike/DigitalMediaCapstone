@@ -9,10 +9,18 @@ public class GameController : NetworkBehaviour {
 
     public GameData GameData;
 
+    public Camera MainCamera;
+
+    public GameObject HighlightPrefab;
+
     [SyncVar]
     public GameObject Human;
     [SyncVar]
     public GameObject Ghost;
+
+    private const float maxTimeSeconds = 60 * 5;
+    [SyncVar]
+    public float secondsLeft;
 
     public GameObject HumanHUD;
     public GameObject GhostHUD;
@@ -38,6 +46,7 @@ public class GameController : NetworkBehaviour {
     void Awake()
     {
         GameData = FindObjectOfType<GameData>();
+        MainCamera = FindObjectOfType<Camera>();
     }
 
 	void Start(){
@@ -51,9 +60,17 @@ public class GameController : NetworkBehaviour {
         else
             GhostHUD.SetActive(true);
 
-        NetworkServer.RegisterHandler(1002, PlayerLoaded);
+        NetworkServer.RegisterHandler(1002, HandleNetworkMessage);
+        FindObjectOfType<NetworkManager>().spawnPrefabs.Add(HighlightPrefab);
+        ClientScene.RegisterPrefab(HighlightPrefab);
+    }
 
-
+    void Update()
+    {
+        if (isServer)
+        {
+            secondsLeft -= 1 * Time.deltaTime;
+        }
     }
 
 	private void GenerateDeathScenario(){
@@ -79,7 +96,7 @@ public class GameController : NetworkBehaviour {
             Human.GetComponent<SpriteRenderer>().sprite = HumanSprite;
     }
     
-    public void PlayerLoaded(NetworkMessage netMsg)
+    public void HandleNetworkMessage(NetworkMessage netMsg)
     {
         var beginMsg = netMsg.ReadMessage<SpawnMessage>();
         Debug.Log("player loaded on server: " + beginMsg.PlayerType);

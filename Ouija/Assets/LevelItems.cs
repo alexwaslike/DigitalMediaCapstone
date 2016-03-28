@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class LevelItems : MonoBehaviour {
-
+public class LevelItems : NetworkBehaviour {
+    
     public List<Collectible> CollectibleItems;
 
     public List<string> GetItemNamesList()
@@ -24,7 +25,7 @@ public class LevelItems : MonoBehaviour {
     {
         foreach(Collectible item in CollectibleItems)
         {
-            if (item.Name.ToLower().Equals(name.ToLower()))
+            if (item.Name.ToLower().Contains(name.ToLower()))
             {
                 return item;
             }
