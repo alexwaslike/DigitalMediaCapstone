@@ -1,21 +1,26 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
-public class GameController : MonoBehaviour {
+public class GameController : NetworkBehaviour {
 
 	public int maxHeight = 100;
 	public int minHeight = 0;
-	public bool AllowGameplay;
 
     public GameData GameData;
 
-	public GameObject PlayerObj;
-	public Player Player;
+    [SyncVar]
+    public GameObject Human;
+    [SyncVar]
+    public GameObject Ghost;
 
     public GameObject HumanHUD;
     public GameObject GhostHUD;
 
-	public Inventory JournalUI;
+    public Sprite HumanSprite;
+    public Sprite GhostSprite;
+
+    public Inventory JournalUI;
 	public AddItemUI AddItemUI;
     public LoseUI LoseUI;
     public GameObject GuessUI;
@@ -23,37 +28,33 @@ public class GameController : MonoBehaviour {
 	public TextDatabase TextDatabase;
     public LevelItems LevelItems;
 
-	private string _culprit;
-	public string Culprit{
-		get {return _culprit;}
-	}
+    [SyncVar]
+    public string Culprit;
+    [SyncVar]
+    public string Weapon;
+    [SyncVar]
+    public string Room;
 
-	private string _weapon;
-	public string Weapon{
-		get {return _weapon;}
-	}
-
-	private string _room;
-	public string Room{
-		get {return _room;}
-	}
-
-	private float _timeScale;
+    void Awake()
+    {
+        GameData = FindObjectOfType<GameData>();
+    }
 
 	void Start(){
 
-        GameData = FindObjectOfType<GameData>();
-
-		_timeScale = Time.timeScale;
-
-		GenerateDeathScenario ();
+        if (isServer) {
+            GenerateDeathScenario();
+        }
 
         if (GameData.PlayerType == PlayerType.Human)
             HumanHUD.SetActive(true);
         else
             GhostHUD.SetActive(true);
 
-	}
+        NetworkServer.RegisterHandler(1002, PlayerLoaded);
+
+
+    }
 
 	private void GenerateDeathScenario(){
 
@@ -62,37 +63,49 @@ public class GameController : MonoBehaviour {
 		int randomRoom = (int)Random.Range (0, TextDatabase.RoomDescriptions.Count);
 
 
-        _culprit = TextDatabase.GetCharacterList()[randomCulprit];
-        _weapon = TextDatabase.GetWeaponList()[randomWeapon];
-        _room = TextDatabase.GetRoomList()[randomRoom];
+        Culprit = TextDatabase.GetCharacterList()[randomCulprit];
+        Weapon = TextDatabase.GetWeaponList()[randomWeapon];
+        Room = TextDatabase.GetRoomList()[randomRoom];
 
-        Debug.Log("name " + _culprit + " weapon " + _weapon + " room " + _room );
+        Debug.Log("name " + Culprit + " weapon " + Weapon + " room " + Room);
 
 	}
 
-	public void PauseGame(bool paused)
-	{
-		if (paused)
-		{
-			Time.timeScale = 0.0f;
-            if (PlayerObj != null)
-                PlayerObj.GetComponent<CharacterMovement>().enabled = false;
-			AllowGameplay = false;
-		} else
-		{
-			Time.timeScale = _timeScale;
-            if (PlayerObj != null)
-                PlayerObj.GetComponent<CharacterMovement>().enabled = true;
-            AllowGameplay = true;
-		}
-	}
+    public void PlayerLoadedClient()
+    {
+        if (Ghost != null)
+            Ghost.GetComponent<SpriteRenderer>().sprite = GhostSprite;
+        if (Human != null)
+            Human.GetComponent<SpriteRenderer>().sprite = HumanSprite;
+    }
+    
+    public void PlayerLoaded(NetworkMessage netMsg)
+    {
+        var beginMsg = netMsg.ReadMessage<SpawnMessage>();
+        Debug.Log("player loaded on server: " + beginMsg.PlayerType);
+
+        if (beginMsg.PlayerType == PlayerType.Ghost)
+        {
+            Ghost = beginMsg.Player;
+            Ghost.GetComponent<SpriteRenderer>().sprite = GhostSprite;
+        }
+        else
+        {
+            Human = beginMsg.Player;
+            Human.GetComponent<SpriteRenderer>().sprite = HumanSprite;
+        }
+           
+    }
 
 	public void OpenJournal(){
 		JournalUI.gameObject.SetActive (true);
 	}
 
 	public void AddItem(Collectible item){
-		Player.AddItemToJournal (item);
+        if (GameData.PlayerType == PlayerType.Human)
+            Human.GetComponent<Player>().AddItemToJournal(item);
+        else
+            Ghost.GetComponent<Player>().AddItemToJournal(item);
 		JournalUI.AddNewItem (item);
 		AddItemUI.gameObject.SetActive (false);
 		JournalUI.Exit ();

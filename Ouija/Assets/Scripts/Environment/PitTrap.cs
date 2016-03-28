@@ -4,7 +4,7 @@ public class PitTrap : Trap{
 
 	void OnTriggerEnter2D(Collider2D collider){
         if (collider.GetComponent<Player>() != null)
-            GameController.Player.TakeDamage(Damage);
+            GameController.Human.GetComponent<Player>().TakeDamage(Damage);
 	}
 
 }

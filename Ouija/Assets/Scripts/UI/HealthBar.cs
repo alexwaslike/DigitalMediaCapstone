@@ -21,9 +21,9 @@ public class HealthBar : MonoBehaviour {
 
 	void Update()
 	{
-        if(GameController.Player != null)
+        if(GameController.Human != null)
         {
-            HealthBarImg.rectTransform.sizeDelta = new Vector2(_maxWidth * GameController.Player.Health / 100, _height);
+            HealthBarImg.rectTransform.sizeDelta = new Vector2(_maxWidth * GameController.Human.GetComponent<Player>().Health / 100, _height);
             HealthBarImg.rectTransform.anchoredPosition = new Vector2(_xLoc + HealthBarImg.rectTransform.sizeDelta.x / 2 - _maxWidth / 2, _yLoc);
         }
 	}
