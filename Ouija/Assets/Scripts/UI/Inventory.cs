@@ -50,7 +50,8 @@ public class Inventory : MonoBehaviour {
 	private void DisplayStats(Collectible item){
 		SelectedItemPortrait.sprite = item.Sprite;
 		SelectedItemText.text = item.Description;
-	}
+        SelectedItemText.text = SelectedItemText.text.Replace("\\n", "\n");
+    }
 
 	public void IconClicked(Collectible item){
 		DisplayStats (item);
