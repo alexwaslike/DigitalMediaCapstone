@@ -8,7 +8,6 @@ using UnityEngine.Networking.NetworkSystem;
 
 public class Player : NetworkBehaviour
 {
-    private const short _myMsg = 1002;
 
     public GameController GameController;
     public SpriteRenderer SpriteRenderer;
@@ -52,17 +51,27 @@ public class Player : NetworkBehaviour
         var message = new SpawnMessage();
         message.Player = gameObject;
         message.PlayerType = GameController.GameData.PlayerType;
-        connectionToServer.Send(_myMsg, message);
+        connectionToServer.Send(MyMsgType.Spawn, message);
 
     }
 
-    [Command]
-    public void CmdHighlightItem(string itemName)
+    public void HighlightItem(string itemName)
     {
-        Collectible item = GameController.LevelItems.GetItemByName(itemName);
-        var highlight = (GameObject)Instantiate(GameController.HighlightPrefab, Vector3.zero, Quaternion.identity);
-        highlight.transform.SetParent(item.transform, false);
-        NetworkServer.Spawn(highlight);
+        if(GameController == null)
+        {
+            Debug.Log("game controller null");
+        } else if (GameController.LevelItems == null)
+        {
+            Debug.Log("level items null");
+        } else if (GameController.LevelItems.GetItemByName(itemName) == null)
+        {
+            Debug.Log("dresser not found");
+        } else
+        {
+            var message = new HintMessage();
+            message.ObjectToHighlight = itemName;
+            connectionToServer.Send(MyMsgType.Highlight, message);
+        }
     }
 
     public void AddItemToJournal(Collectible item)

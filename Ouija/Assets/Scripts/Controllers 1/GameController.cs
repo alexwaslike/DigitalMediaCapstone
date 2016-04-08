@@ -12,6 +12,7 @@ public class GameController : NetworkBehaviour {
     public Camera MainCamera;
 
     public GameObject HighlightPrefab;
+    public GameObject DresserPrefab;
 
     [SyncVar]
     public GameObject Human;
@@ -60,9 +61,13 @@ public class GameController : NetworkBehaviour {
         else
             GhostHUD.SetActive(true);
 
-        NetworkServer.RegisterHandler(1002, HandleNetworkMessage);
+        NetworkServer.RegisterHandler(MyMsgType.Highlight, HandleHintMessage);
+        NetworkServer.RegisterHandler(MyMsgType.Spawn, HandleSpawnMessage);
+        
         FindObjectOfType<NetworkManager>().spawnPrefabs.Add(HighlightPrefab);
         ClientScene.RegisterPrefab(HighlightPrefab);
+        FindObjectOfType<NetworkManager>().spawnPrefabs.Add(DresserPrefab);
+        ClientScene.RegisterPrefab(DresserPrefab);
     }
 
     void Update()
@@ -75,18 +80,21 @@ public class GameController : NetworkBehaviour {
 
 	private void GenerateDeathScenario(){
 
-		int randomCulprit = (int)Random.Range (0, TextDatabase.CharacterDescriptions.Count);
-		int randomWeapon = (int)Random.Range (0, TextDatabase.WeaponDescriptions.Count);
-		int randomRoom = (int)Random.Range (0, TextDatabase.RoomDescriptions.Count);
+        if (isServer)
+        {
+		    int randomCulprit = (int)Random.Range (0, TextDatabase.CharacterDescriptions.Count);
+		    int randomWeapon = (int)Random.Range (0, TextDatabase.WeaponDescriptions.Count);
+		    int randomRoom = (int)Random.Range (0, TextDatabase.RoomDescriptions.Count);
 
 
-        Culprit = TextDatabase.GetCharacterList()[randomCulprit];
-        Weapon = TextDatabase.GetWeaponList()[randomWeapon];
-        Room = TextDatabase.GetRoomList()[randomRoom];
+            Culprit = TextDatabase.GetCharacterList()[randomCulprit];
+            Weapon = TextDatabase.GetWeaponList()[randomWeapon];
+            Room = TextDatabase.GetRoomList()[randomRoom];
 
-        Debug.Log("name " + Culprit + " weapon " + Weapon + " room " + Room);
+            Debug.Log("name " + Culprit + " weapon " + Weapon + " room " + Room);
+        }
 
-	}
+    }
 
     public void PlayerLoadedClient()
     {
@@ -95,23 +103,39 @@ public class GameController : NetworkBehaviour {
         if (Human != null)
             Human.GetComponent<SpriteRenderer>().sprite = HumanSprite;
     }
-    
-    public void HandleNetworkMessage(NetworkMessage netMsg)
-    {
-        var beginMsg = netMsg.ReadMessage<SpawnMessage>();
-        Debug.Log("player loaded on server: " + beginMsg.PlayerType);
 
-        if (beginMsg.PlayerType == PlayerType.Ghost)
+    public void HandleHintMessage(NetworkMessage netMsg)
+    {
+
+        var hintMsg = netMsg.ReadMessage<HintMessage>();
+
+        string itemName = hintMsg.ObjectToHighlight;
+
+        Collectible item = LevelItems.GetItemByName(itemName);
+        var highlight = (GameObject)Instantiate(HighlightPrefab, Vector3.zero, Quaternion.identity);
+        highlight.transform.SetParent(item.transform, false);
+        NetworkServer.Spawn(highlight);
+        
+
+    }
+
+    public void HandleSpawnMessage(NetworkMessage netMsg)
+    {
+        var spawnMsg = netMsg.ReadMessage<SpawnMessage>();
+        
+        Debug.Log("player loaded on server: " + spawnMsg.PlayerType);
+
+        if (spawnMsg.PlayerType == PlayerType.Ghost)
         {
-            Ghost = beginMsg.Player;
+            Ghost = spawnMsg.Player;
             Ghost.GetComponent<SpriteRenderer>().sprite = GhostSprite;
         }
         else
         {
-            Human = beginMsg.Player;
+            Human = spawnMsg.Player;
             Human.GetComponent<SpriteRenderer>().sprite = HumanSprite;
         }
-           
+        
     }
 
 	public void OpenJournal(){

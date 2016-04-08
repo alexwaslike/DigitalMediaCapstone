@@ -61,7 +61,7 @@ public class OuijaInputHandler : NetworkBehaviour {
         
         if (_objectList.Contains(_input))
         {
-            GameController.Ghost.GetComponent<Player>().CmdHighlightItem(_input);
+            GameController.Ghost.GetComponent<Player>().HighlightItem(_input);
         }
 
     }
