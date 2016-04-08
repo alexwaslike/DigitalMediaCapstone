@@ -19,9 +19,10 @@ public class GameController : NetworkBehaviour {
     [SyncVar]
     public GameObject Ghost;
 
-    private const float maxTimeSeconds = 60 * 5;
+    private const float _maxTimeSeconds = 5;
     [SyncVar]
-    public float secondsLeft;
+    public float SecondsLeft;
+    public bool GameplayEnabled;
 
     public GameObject HumanHUD;
     public GameObject GhostHUD;
@@ -32,6 +33,7 @@ public class GameController : NetworkBehaviour {
     public Inventory JournalUI;
 	public AddItemUI AddItemUI;
     public LoseUI LoseUI;
+    public LoseUI WinUI;
     public GameObject GuessUI;
 
 	public TextDatabase TextDatabase;
@@ -48,12 +50,14 @@ public class GameController : NetworkBehaviour {
     {
         GameData = FindObjectOfType<GameData>();
         MainCamera = FindObjectOfType<Camera>();
+        GameplayEnabled = true;
     }
 
 	void Start(){
 
         if (isServer) {
             GenerateDeathScenario();
+            SecondsLeft = _maxTimeSeconds;
         }
 
         if (GameData.PlayerType == PlayerType.Human)
@@ -74,8 +78,17 @@ public class GameController : NetworkBehaviour {
     {
         if (isServer)
         {
-            secondsLeft -= 1 * Time.deltaTime;
+            if(Ghost != null && Human != null && SecondsLeft > 0)
+            {
+                SecondsLeft -= 1 * Time.deltaTime;
+            }
         }
+
+        if (SecondsLeft <= 0)
+            LoseGame();
+        else
+            GhostHUD.GetComponent<PlayerHUD>().UpdateTimerText(SecondsLeft);
+            HumanHUD.GetComponent<PlayerHUD>().UpdateTimerText(SecondsLeft);
     }
 
 	private void GenerateDeathScenario(){
@@ -139,7 +152,8 @@ public class GameController : NetworkBehaviour {
     }
 
 	public void OpenJournal(){
-		JournalUI.gameObject.SetActive (true);
+        if (GameplayEnabled)
+            JournalUI.gameObject.SetActive (true);
 	}
 
 	public void AddItem(Collectible item){
@@ -154,20 +168,31 @@ public class GameController : NetworkBehaviour {
 
     public void MakeAGuess()
     {
-        GuessUI.SetActive(true);
+        if(GameplayEnabled)
+            GuessUI.SetActive(true);
     }
 
     public void WinGame()
     {
-        // TODO: once player and ghost interaction complete,
-        // and networking prototype made,
-        // need to have player tell ghost that game is done
-        // and display "win" screen on both
+        DisableGameplay();
+        WinUI.gameObject.SetActive(true);
     }
 
     public void LoseGame()
     {
+        DisableGameplay();
         LoseUI.gameObject.SetActive(true);
+    }
+
+    private void DisableGameplay()
+    {
+        GameplayEnabled = false;
+        Human.GetComponent<CharacterMovement>().enabled = false;
+        if(Ghost != null)
+            Ghost.GetComponent<CharacterMovement>().enabled = false;
+        Human.GetComponent<Player>().enabled = false;
+        if (Ghost != null)
+            Ghost.GetComponent<Player>().enabled = false;
     }
 
 }
