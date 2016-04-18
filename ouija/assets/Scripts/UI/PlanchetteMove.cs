@@ -17,7 +17,7 @@ public class PlanchetteMove : MonoBehaviour
     {
         Vector3 target = getLetterPosition();
 
-        float distanceToTarget = Mathf.Sqrt((target.x - transform.position.x) * (target.x - transform.position.x) + (target.y - transform.position.y) * (target.y - transform.position.y));
+        //float distanceToTarget = Mathf.Sqrt((target.x - transform.position.x) * (target.x - transform.position.x) + (target.y - transform.position.y) * (target.y - transform.position.y));
         var dir = target - transform.position;
 
 
