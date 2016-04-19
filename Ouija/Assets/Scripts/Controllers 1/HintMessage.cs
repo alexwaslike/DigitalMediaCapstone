@@ -6,5 +6,6 @@ public class HintMessage : MessageBase
 {
 
     public string ObjectToHighlight;
+    public string textMessage;
 
 }

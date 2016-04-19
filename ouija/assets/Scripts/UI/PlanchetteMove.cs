@@ -8,43 +8,94 @@ public class PlanchetteMove : MonoBehaviour
     Vector3 startPos;
     CanvasScaler scaler;
 
-    public float speed = 1;
+    string moveTo = "";
+    string stringBuffer = "";
+
+    bool moving = false;
+    bool inProgress = false;
+
+    float startTime = .6f;
+    float timer;
+    public float speed = 444.4f;
+    public Transform board;
 
     // Use this for initialization
     void Start()
     {
-       startPos = transform.position;
-       target = startPos;
-       scaler = GetComponentInParent<CanvasScaler>();
+        timer = startTime;
+        startPos = transform.position;
+        target = startPos;
+        scaler = GetComponentInParent<CanvasScaler>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-
-        target = getLetterPosition();
-
-        var dir = target - transform.position;
-
-        //Debug.Log("dir: "+dir + "/n");
-
-
-
-       // dir.x = dir.x * scaler.scaleFactor;
-       // dir.y = dir.y * scaler.scaleFactor;
-        GetComponent<Rigidbody2D>().AddForce(dir * speed);
+        attemptToMove();
     }
-    //returns letter position relative to parent (UI board)
-   Vector3 getLetterPosition()
+ 
+   
+
+
+    //to be called from another function to start movement.
+    public void movePlanchette(string str)
     {
-        Vector3 letterPos = new Vector3(040.0f, -100.0f, 0.0f);
+        stringBuffer += str;
+        if (!moving)
+        {
+            target = getLetterPosition();
+            moving = true;
+        }
+    }
+
+    //called each update
+    void attemptToMove()
+    {
+        if (moving && !inProgress && timer<0f)
+        {
+            inProgress = true;
+            Vector3 dir = target - transform.position;
+            dir = new Vector3(dir.x * speed, dir.y * speed, dir.z * speed);
+            if (Mathf.Abs(dir.x) <= 1 && Mathf.Abs(dir.y) <= 1)
+            {
+                if (stringBuffer != "")
+                {
+                    target = getLetterPosition();
+                    timer = startTime;
+                }
+                else
+                {
+                    moving = false;
+                }
+            }
+            else 
+            {
+                transform.Translate(dir * Time.deltaTime);
+            }
+            inProgress = false;
+        }
+        else
+        {
+
+            timer = timer - Time.deltaTime;
+        }
+
+    }
 
 
+    //returns letter position relative to parent (UI board)
+    Vector3 getLetterPosition()
+    {
+        moveTo="" + stringBuffer[0];
+        moveTo = moveTo.ToUpper();
+        stringBuffer = stringBuffer.Remove(0, 1);
+        Vector3 letterPos = startPos;
 
-       letterPos.x = letterPos.x/1000 * scaler.scaleFactor * Screen.width;
-        letterPos.y = letterPos.y/1000 * scaler.scaleFactor *Screen.height;
-        return (startPos + letterPos);
+        Transform childGO = board.FindChild(moveTo);
+        letterPos = childGO.position;
+
+        return(letterPos);
     }
 
 

@@ -26,6 +26,7 @@ public class GameController : NetworkBehaviour {
 
     public GameObject HumanHUD;
     public GameObject GhostHUD;
+    public GameObject Planchette;
 
     public Sprite HumanSprite;
     public Sprite GhostSprite;
@@ -67,7 +68,8 @@ public class GameController : NetworkBehaviour {
 
         NetworkServer.RegisterHandler(MyMsgType.Highlight, HandleHintMessage);
         NetworkServer.RegisterHandler(MyMsgType.Spawn, HandleSpawnMessage);
-        
+        NetworkServer.RegisterHandler(MyMsgType.BoardMove, HandleBoardMessage);
+
         FindObjectOfType<NetworkManager>().spawnPrefabs.Add(HighlightPrefab);
         ClientScene.RegisterPrefab(HighlightPrefab);
         FindObjectOfType<NetworkManager>().spawnPrefabs.Add(DresserPrefab);
@@ -128,7 +130,6 @@ public class GameController : NetworkBehaviour {
         var highlight = (GameObject)Instantiate(HighlightPrefab, Vector3.zero, Quaternion.identity);
         highlight.transform.SetParent(item.transform, false);
         NetworkServer.Spawn(highlight);
-        
 
     }
 
@@ -149,6 +150,12 @@ public class GameController : NetworkBehaviour {
             Human.GetComponent<SpriteRenderer>().sprite = HumanSprite;
         }
         
+    }
+
+    public void HandleBoardMessage(NetworkMessage netMsg)
+    {
+        var boardMsg = netMsg.ReadMessage<HintMessage>();
+        Planchette.GetComponent<PlanchetteMove>().movePlanchette(boardMsg.textMessage);
     }
 
 	public void OpenJournal(){

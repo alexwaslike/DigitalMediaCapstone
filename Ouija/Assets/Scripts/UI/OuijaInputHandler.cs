@@ -38,7 +38,7 @@ public class OuijaInputHandler : NetworkBehaviour
           
         if (portExists)
         {
-            stream = new SerialPort("COM4", 9600);
+            stream = new SerialPort("C0M4", 9600);
             stream.Open();
         }
     }
@@ -104,7 +104,12 @@ public class OuijaInputHandler : NetworkBehaviour
 
         if (_objectList.Contains(_input))
         {
+            
             GameController.Ghost.GetComponent<Player>().HighlightItem(_input);
+        }
+        else
+        {
+            GameController.Ghost.GetComponent<Player>().BoardMove(_input);
         }
 
     }

@@ -74,6 +74,20 @@ public class Player : NetworkBehaviour
         }
     }
 
+    public void BoardMove(string str)
+    {
+        if (GameController == null)
+        {
+            Debug.Log("game controller null");
+        }
+        else
+        {
+            var message = new HintMessage();
+            message.textMessage = str;
+            connectionToServer.Send(MyMsgType.BoardMove, message);
+        }
+    }
+
     public void AddItemToJournal(Collectible item)
     {
         if(isLocalPlayer)
