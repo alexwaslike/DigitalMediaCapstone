@@ -14,7 +14,7 @@ public class PlanchetteMove : MonoBehaviour
     bool moving = false;
     bool inProgress = false;
 
-    float startTime = .6f;
+    float startTime = 1.0f;
     float timer;
     public float speed = 444.4f;
     public Transform board;
@@ -84,7 +84,7 @@ public class PlanchetteMove : MonoBehaviour
     }
 
 
-    //returns letter position relative to parent (UI board)
+    //returns position of next letter
     Vector3 getLetterPosition()
     {
         moveTo="" + stringBuffer[0];
@@ -92,10 +92,17 @@ public class PlanchetteMove : MonoBehaviour
         stringBuffer = stringBuffer.Remove(0, 1);
         Vector3 letterPos = startPos;
 
-        Transform childGO = board.FindChild(moveTo);
-        letterPos = childGO.position;
+        Transform childOfBoard = board.FindChild(moveTo);
+		if (childOfBoard == null) 
+		{
+			return (target);
+		} 
+		else 
+		{
+			letterPos = childOfBoard.position;
 
-        return(letterPos);
+			return(letterPos);
+		}
     }
 
 
