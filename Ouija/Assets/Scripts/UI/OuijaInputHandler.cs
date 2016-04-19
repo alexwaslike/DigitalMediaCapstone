@@ -65,7 +65,7 @@ public class OuijaInputHandler : NetworkBehaviour
         {
             if (Input.GetAxis("Submit") > 0 && _cooldownFinished)
             {
-                _input = OutputText.text;
+                _input = OutputText.text + "_";
                 OutputText.text = "";
                 SubmitItemName();
             }
@@ -81,7 +81,7 @@ public class OuijaInputHandler : NetworkBehaviour
         {
             if (((Input.GetAxis("Submit") > 0) || _input == "Goodbye") && _cooldownFinished)
             {
-                _input = OutputText.text;
+                _input = OutputText.text + "_";
                 OutputText.text = "";
                 SubmitItemName();
             }
