@@ -11,7 +11,7 @@ public class SelfSort : MonoBehaviour {
 
 	public void SetSortingOrder()
 	{
-		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer> ();
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null && GameController != null)
         {
             spriteRenderer.sortingOrder = GameController.maxHeight - Mathf.FloorToInt(transform.position.y * 4);
