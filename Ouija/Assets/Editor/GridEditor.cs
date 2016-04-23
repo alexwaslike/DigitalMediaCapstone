@@ -48,6 +48,12 @@ public class GridEditor : Editor {
 
         GUILayout.BeginVertical();
 
+        GUILayout.Label("Start X");
+        grid.StartX = EditorGUILayout.FloatField(grid.StartX, GUILayout.Width(50));
+
+        GUILayout.Label("Start Y");
+        grid.StartY = EditorGUILayout.FloatField(grid.StartY, GUILayout.Width(50));
+
         GUILayout.Label("Cell Width");
         grid.CellWidth = EditorGUILayout.FloatField(grid.CellWidth, GUILayout.Width(50));
 

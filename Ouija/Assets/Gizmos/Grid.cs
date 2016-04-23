@@ -2,6 +2,9 @@
 
 public class Grid : MonoBehaviour {
 
+    public float StartX = 0.0f;
+    public float StartY = 0.0f;
+
     public float CellWidth = 10.0f; 
     public float CellHeight;
     public float CellAngle = 30.0f;
@@ -26,9 +29,9 @@ public class Grid : MonoBehaviour {
                 Vector3 newPos = Vector3.zero;
 
                 if (alt)
-                    newPos = new Vector3(x * (CellWidth / 2), y * CellHeight + CellHeight / 2, 0);
+                    newPos = new Vector3(x * (CellWidth / 2) + StartX, y * CellHeight + CellHeight / 2 + StartY, 0);
                 else
-                    newPos = new Vector3(x * (CellWidth / 2), y * CellHeight, 0);
+                    newPos = new Vector3(x * (CellWidth / 2) + StartX, y * CellHeight + StartY, 0);
 
                 grid[x, y] = newPos;
 
