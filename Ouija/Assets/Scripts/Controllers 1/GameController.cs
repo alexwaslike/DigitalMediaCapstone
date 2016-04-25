@@ -47,7 +47,7 @@ public class GameController : NetworkBehaviour {
     [SyncVar]
     public string Room;
     [SyncVar]
-    public float Seed = 0;
+    public int Seed = 0;
 
     void Awake()
     {
@@ -59,7 +59,9 @@ public class GameController : NetworkBehaviour {
 	void Start(){
         if (Seed == 0)
         {
-            Random.seed = Random.Range(-99999999, -99999999);
+            Random.seed = (int) Random.Range(-99999999, 99999999);
+            Seed = Random.seed;
+            Debug.Log(Random.seed);
         }
 
         if (isServer) {
