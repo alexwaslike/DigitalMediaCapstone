@@ -46,6 +46,8 @@ public class GameController : NetworkBehaviour {
     public string Weapon;
     [SyncVar]
     public string Room;
+    [SyncVar]
+    public float Seed = 0;
 
     void Awake()
     {
@@ -55,6 +57,10 @@ public class GameController : NetworkBehaviour {
     }
 
 	void Start(){
+        if (Seed == 0)
+        {
+            Random.seed = Random.Range(-99999999, -99999999);
+        }
 
         if (isServer) {
             GenerateDeathScenario();
@@ -106,8 +112,12 @@ public class GameController : NetworkBehaviour {
             Weapon = TextDatabase.GetWeaponList()[randomWeapon];
             Room = TextDatabase.GetRoomList()[randomRoom];
 
+            LevelItems.InitializeCluesAndNotes();
+
             Debug.Log("name " + Culprit + " weapon " + Weapon + " room " + Room);
         }
+
+
 
     }
 

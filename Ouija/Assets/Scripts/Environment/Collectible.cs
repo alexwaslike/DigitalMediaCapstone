@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+//***********Todo: 1)add items to collectible when notes are initialized. 2) check how it does no server, ensure sync
+
 
 public class Collectible : MonoBehaviour {
 
@@ -20,5 +22,13 @@ public class Collectible : MonoBehaviour {
 		GameController.OpenJournal ();
 		AddItemInventory.gameObject.SetActive (true);
 	}
+
+
+   public void SetNote(string key)
+    {
+        Name = key;
+        Description = GameController.TextDatabase.GetClueOrNoteValue(key);
+    }
+
 
 }
