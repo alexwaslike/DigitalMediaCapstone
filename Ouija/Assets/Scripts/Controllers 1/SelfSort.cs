@@ -16,6 +16,5 @@ public class SelfSort : MonoBehaviour {
         {
             spriteRenderer.sortingOrder = GameController.maxHeight - Mathf.FloorToInt(transform.position.y * 4);
         }
-        else Debug.Log("Sprite Renderer or GameController null when attempting to layer sort!");
 	}
 }

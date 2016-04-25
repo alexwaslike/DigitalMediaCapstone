@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Networking.NetworkSystem;
 
 public class GameController : NetworkBehaviour {
 
@@ -52,7 +51,6 @@ public class GameController : NetworkBehaviour {
     void Awake()
     {
         GameData = FindObjectOfType<GameData>();
-        MainCamera = FindObjectOfType<Camera>();
         GameplayEnabled = true;
     }
 
@@ -199,6 +197,7 @@ public class GameController : NetworkBehaviour {
 
     public void LoseGame()
     {
+        MainCamera.transform.SetParent(null);
         DisableGameplay();
         LoseUI.gameObject.SetActive(true);
     }
