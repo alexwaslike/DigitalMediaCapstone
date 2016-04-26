@@ -9,11 +9,13 @@ public class LevelItems : NetworkBehaviour {
     public Object NotePrefab;
     public GameController GameController;
 
+    private int totalNotes= 22;
+
     // add 2 clues and 20 notes (all but the first note and the killer's final note)
     public void InitializeCluesAndNotes()
     {
         string culprit = GameController.Culprit;
-
+        Random.seed = GameController.Seed;
         //first we handle the clues
         List<string> textList = GameController.TextDatabase.GetClueList();
         string clue1 = culprit + " Clue 1";
@@ -45,16 +47,35 @@ public class LevelItems : NetworkBehaviour {
     //choose a random child to add the note (or clue) to.
     public void AddNoteToFurniture(string key)
     {
+        
+
         //create the note and make it a child of a random piece of furniture
         int rand = (int)Mathf.Round(Random.Range(-.409f, transform.childCount - .501f));
         Transform furniture = transform.GetChild(rand);
-        GameObject note = Instantiate(NotePrefab) as GameObject;
-        note.transform.parent = furniture;
+        Collectible furnitureCol = furniture.GetComponent<Collectible>();
+        if (furnitureCol.hasNote)
+        {
+            if (transform.childCount >= totalNotes)
+            {
+                AddNoteToFurniture(key);
+            }
+        }
+        else
+        {
 
-        //initialize note values
-        Collectible collectibleNote = note.GetComponent<Collectible>();
-        collectibleNote.GameController = GameController;
-        collectibleNote.SetNote(key);
+            GameObject note = Instantiate(NotePrefab) as GameObject;
+            note.transform.parent = furniture;
+            Collectible collectibleNote = note.GetComponent<Collectible>();
+            furnitureCol.ItemToCollect = collectibleNote;
+
+            furnitureCol.hasNote = true;
+
+            //initialize note values
+
+            collectibleNote.GameController = GameController;
+            collectibleNote.SetNote(key);
+            
+        }
     }
 
     public List<string> GetItemNamesList()

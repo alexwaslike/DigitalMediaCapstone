@@ -10,6 +10,7 @@ public class Collectible : MonoBehaviour {
 	public Sprite Sprite;
 	public string Name;
 	public string Description;
+    public bool hasNote= false;
 
     public Collectible ItemToCollect;
 
@@ -20,7 +21,7 @@ public class Collectible : MonoBehaviour {
 	void OnMouseUp(){
         AddItemInventory.SelectedCollectible = ItemToCollect;
 		GameController.OpenJournal ();
-		AddItemInventory.gameObject.SetActive (true);
+        AddItemInventory.gameObject.SetActive(true);
 	}
 
 

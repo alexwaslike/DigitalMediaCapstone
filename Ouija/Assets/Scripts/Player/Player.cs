@@ -39,7 +39,7 @@ public class Player : NetworkBehaviour
         {
             GameController.Ghost = gameObject;
         }
-
+        
         GameController.MainCamera.transform.parent = transform;
 
          _journal = new List<Collectible>();
