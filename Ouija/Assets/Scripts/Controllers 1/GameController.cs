@@ -18,7 +18,7 @@ public class GameController : NetworkBehaviour {
     [SyncVar]
     public GameObject Ghost;
 
-    private const float _maxTimeSeconds = 500;
+    private const float _maxTimeSeconds = 300;
     [SyncVar]
     public float SecondsLeft;
     public bool GameplayEnabled;
@@ -104,7 +104,7 @@ public class GameController : NetworkBehaviour {
         if (isServer)
         {
             Seed = (int)Random.Range(-99999999, 99999999);
-            Random.seed = Random.seed;
+            Random.seed = Seed;
             ScenarioGen();
         } 
     }
