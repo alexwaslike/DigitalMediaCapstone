@@ -15,7 +15,7 @@ public class LevelItems : NetworkBehaviour {
     public void InitializeCluesAndNotes()
     {
         string culprit = GameController.Culprit;
-
+        Random.seed = GameController.Seed;
         //first we handle the clues
         List<string> textList = GameController.TextDatabase.GetClueList();
         string clue1 = culprit + " Clue 1";
@@ -47,7 +47,7 @@ public class LevelItems : NetworkBehaviour {
     //choose a random child to add the note (or clue) to.
     public void AddNoteToFurniture(string key)
     {
-        Random.seed = GameController.Seed;
+        
 
         //create the note and make it a child of a random piece of furniture
         int rand = (int)Mathf.Round(Random.Range(-.409f, transform.childCount - .501f));

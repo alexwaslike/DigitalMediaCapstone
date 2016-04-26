@@ -18,7 +18,7 @@ public class GameController : NetworkBehaviour {
     [SyncVar]
     public GameObject Ghost;
 
-    private const float _maxTimeSeconds = 5;
+    private const float _maxTimeSeconds = 500;
     [SyncVar]
     public float SecondsLeft;
     public bool GameplayEnabled;
@@ -37,16 +37,15 @@ public class GameController : NetworkBehaviour {
     public GameObject GuessUI;
 
 	public TextDatabase TextDatabase;
+ 
     public LevelItems LevelItems;
 
-    [SyncVar]
     public string Culprit;
-    [SyncVar]
     public string Weapon;
-    [SyncVar]
     public string Room;
     [SyncVar]
-    public int Seed = 0;
+    public int Seed=0;
+    private bool spawnedNotes;
 
     void Awake()
     {
@@ -55,13 +54,6 @@ public class GameController : NetworkBehaviour {
     }
 
 	void Start(){
-        if (Seed == 0)
-        {
-            Random.seed = (int) Random.Range(-99999999, 99999999);
-            Seed = Random.seed;
-            Debug.Log(Random.seed);
-        }
-
         if (isServer) {
             GenerateDeathScenario();
             SecondsLeft = _maxTimeSeconds;
@@ -91,6 +83,14 @@ public class GameController : NetworkBehaviour {
                 SecondsLeft -= 1 * Time.deltaTime;
             }
         }
+        else
+        {
+           if (Seed!=0 && (!spawnedNotes))
+            {
+                spawnedNotes = true;
+                ScenarioGen();
+            }
+        }
 
         if (SecondsLeft <= 0)
             LoseGame();
@@ -103,22 +103,26 @@ public class GameController : NetworkBehaviour {
 
         if (isServer)
         {
-		    int randomCulprit = (int)Random.Range (0, TextDatabase.CharacterDescriptions.Count);
-		    int randomWeapon = (int)Random.Range (0, TextDatabase.WeaponDescriptions.Count);
-		    int randomRoom = (int)Random.Range (0, TextDatabase.RoomDescriptions.Count);
+            Seed = (int)Random.Range(-99999999, 99999999);
+            Random.seed = Random.seed;
+            ScenarioGen();
+        } 
+    }
+
+    private void ScenarioGen()
+    {
+        int randomCulprit = (int)Random.Range(0, TextDatabase.CharacterDescriptions.Count);
+        int randomWeapon = (int)Random.Range(0, TextDatabase.WeaponDescriptions.Count);
+        int randomRoom = (int)Random.Range(0, TextDatabase.RoomDescriptions.Count);
 
 
-            Culprit = TextDatabase.GetCharacterList()[randomCulprit];
-            Weapon = TextDatabase.GetWeaponList()[randomWeapon];
-            Room = TextDatabase.GetRoomList()[randomRoom];
+        Culprit = TextDatabase.GetCharacterList()[randomCulprit];
+        Weapon = TextDatabase.GetWeaponList()[randomWeapon];
+        Room = TextDatabase.GetRoomList()[randomRoom];
 
-            LevelItems.InitializeCluesAndNotes();
+        Debug.Log("name " + Culprit + " weapon " + Weapon + " room " + Room);
 
-            Debug.Log("name " + Culprit + " weapon " + Weapon + " room " + Room);
-        }
-
-
-
+        LevelItems.InitializeCluesAndNotes();
     }
 
     public void PlayerLoadedClient()

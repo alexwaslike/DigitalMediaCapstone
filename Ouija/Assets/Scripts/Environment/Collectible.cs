@@ -29,7 +29,6 @@ public class Collectible : MonoBehaviour {
     {
         Name = key;
         Description = GameController.TextDatabase.GetClueOrNoteValue(key);
-        Debug.Log(Random.seed);
     }
 
 
