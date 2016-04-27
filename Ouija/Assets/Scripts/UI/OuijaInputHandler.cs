@@ -17,39 +17,18 @@ public class OuijaInputHandler : NetworkBehaviour
     private float _inputCooldown;
     private bool _cooldownFinished;
 
-    private SerialPort stream;
-    //will be true if audino device is connected
-    bool portExists=false;
 
 
     void Start()
     {
         _objectList = GameController.LevelItems.GetItemNamesList();
         _inputCooldown = MaxInputCooldown;
-
-        //initialize ports and stream for audino device
-        foreach (string str in SerialPort.GetPortNames())
-        {
-            if (str == "C0M4")
-            {
-                portExists = true;
-            }
-        }
-          
-        if (portExists)
-        {
-            stream = new SerialPort("C0M4", 9600);
-            stream.Open();
-        }
+        
     }
 
     void Update()
     {
-        if (portExists){
-            OutputText.text += stream.ReadLine();
-        }
-
-
+    
         if (!_cooldownFinished)
         {
             _inputCooldown = _inputCooldown - 1 * Time.deltaTime;
@@ -76,10 +55,19 @@ public class OuijaInputHandler : NetworkBehaviour
 
         }
 
+    }
+    
+
+    public void AddToText(string toAdd)
+    {
+        OutputText.text += toAdd;
+    }
+
+    public void SendBoardMessage(string message)
+    {
         //for the actual ouija board
-        if (portExists)
-        {
-            if (((Input.GetAxis("Submit") > 0) || _input == "Goodbye") && _cooldownFinished)
+
+            if (((Input.GetAxis("Submit") > 0) || message == ";"))
             {
                 _input = OutputText.text + "_";
                 OutputText.text = "";
@@ -89,10 +77,7 @@ public class OuijaInputHandler : NetworkBehaviour
             {
                 OutputText.text += Input.inputString;
             }
-        }
-
     }
-
 
 
     private void SubmitItemName()
@@ -104,7 +89,7 @@ public class OuijaInputHandler : NetworkBehaviour
 
         if (_objectList.Contains(_input))
         {
-            
+
             GameController.Ghost.GetComponent<Player>().HighlightItem(_input);
         }
         else
