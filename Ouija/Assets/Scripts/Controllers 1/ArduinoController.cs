@@ -14,7 +14,6 @@ public class ArduinoController : MonoBehaviour
         bool defaultPortFound = false;
         foreach (string str in SerialPort.GetPortNames())
         {
-            Debug.Log(str);
             if (str == defaultPort )
             {
                 defaultPortFound = true;
@@ -22,7 +21,6 @@ public class ArduinoController : MonoBehaviour
         }
         foreach (string str in SerialPort.GetPortNames())
         {
-            Debug.Log(str);
             if (str != "" && !defaultPortFound)
             {
                 defaultPort = str;
@@ -43,7 +41,6 @@ public class ArduinoController : MonoBehaviour
         try
         {
             recieved = sp.ReadLine();
-            Debug.Log(recieved);
             oih.AddToText(recieved);
             oih.SendBoardMessage(recieved);
         }
