@@ -8,17 +8,30 @@ public class ArduinoController : MonoBehaviour
     public OuijaInputHandler oih;
     SerialPort sp;
     string recieved;
+    string defaultPort = "COM3";
     void Start()
     {
+        bool defaultPortFound = false;
         foreach (string str in SerialPort.GetPortNames())
         {
             Debug.Log(str);
-            if (str == "C0M4")
+            if (str == defaultPort )
             {
-
+                defaultPortFound = true;
             }
         }
-        sp = new SerialPort("COM3", 9600);
+        foreach (string str in SerialPort.GetPortNames())
+        {
+            Debug.Log(str);
+            if (str != "" && !defaultPortFound)
+            {
+                defaultPort = str;
+            }
+        }
+
+
+
+        sp = new SerialPort(defaultPort, 9600);
         sp.Open();
         sp.ReadTimeout = 1;
 
