@@ -15,7 +15,6 @@ public class ServerHUD : MonoBehaviour {
     public InputField AddressInput;
     public InputField PortInput;
 
-    public Text StatusText;
     public Text HostAddressText;
     public Text ClientAddressText;
 
@@ -24,11 +23,6 @@ public class ServerHUD : MonoBehaviour {
     public string ConnectingText = "[Connecting...]";
     public string HostFailedTtext = "[Starting host failed.]";
     public string ConnectionFailedText = "[Connection Failed]";
-	
-    void Start()
-    {
-        StatusText.text = NotConnectedText;
-    }
 
     public void StartHost()
     {
