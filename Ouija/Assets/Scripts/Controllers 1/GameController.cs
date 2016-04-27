@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Networking.NetworkSystem;
 
 public class GameController : NetworkBehaviour {
 
@@ -29,7 +28,9 @@ public class GameController : NetworkBehaviour {
     public GameObject Planchette;
 
     public Sprite HumanSprite;
+    public RuntimeAnimatorController HumanAnimationController;
     public Sprite GhostSprite;
+    public RuntimeAnimatorController GhostAnimationController;
 
     public Inventory JournalUI;
 	public AddItemUI AddItemUI;
@@ -143,11 +144,15 @@ public class GameController : NetworkBehaviour {
         {
             Ghost = spawnMsg.Player;
             Ghost.GetComponent<SpriteRenderer>().sprite = GhostSprite;
+            Ghost.GetComponent<Animator>().runtimeAnimatorController = GhostAnimationController;
+            Ghost.GetComponent<Animator>().enabled = true;
         }
         else
         {
             Human = spawnMsg.Player;
             Human.GetComponent<SpriteRenderer>().sprite = HumanSprite;
+            Human.GetComponent<Animator>().runtimeAnimatorController = HumanAnimationController;
+            Human.GetComponent<Animator>().enabled = true;
         }
         
     }
