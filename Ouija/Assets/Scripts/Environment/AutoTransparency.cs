@@ -4,28 +4,35 @@
 [RequireComponent(typeof(EdgeCollider2D))]
 public class AutoTransparency : MonoBehaviour
 {
-    private SpriteRenderer _spriteRenderer;
+    private SpriteRenderer[] _spriteRenderers;
     private Color _defaultColor;
     private Color _transparentColor;
 
     void Start()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _defaultColor = _spriteRenderer.color;
-        _transparentColor = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0.3f);
+        _spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        _defaultColor = _spriteRenderers[0].color;
+
+        _transparentColor = new Color(_spriteRenderers[0].color.r, _spriteRenderers[0].color.g, _spriteRenderers[0].color.b, 0.3f);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log(other);
         if (other.gameObject.tag.Equals("Player"))
-            _spriteRenderer.color = _transparentColor;
+        {
+            foreach (SpriteRenderer renderer in _spriteRenderers)
+                renderer.color = _transparentColor;
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.tag.Equals("Player"))
-            _spriteRenderer.color = _defaultColor;
+        {
+            foreach (SpriteRenderer renderer in _spriteRenderers)
+                renderer.color = _defaultColor;
+        }
     }
 
 }
